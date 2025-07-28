@@ -1,0 +1,16 @@
+# SOC Alert Triage Using Splunk SIEM
+
+This project simulates the detection and triage of brute-force and DDoS attacks using Splunk.
+
+## 🛠 Tools Used
+- Splunk SIEM
+- Apache and Windows Logs
+- CyberChef, VirusTotal, Splunk CIM
+
+## 🔍 Key Activities
+- Built detection rules for brute-force login attempts and POST anomalies
+- Created visual dashboards for alert monitoring and geolocation
+- Mapped detections to MITRE ATT&CK and documented incident findings
+
+📄 [Download Full Report (PDF)](./Splunk_SIEM_Case_Study_Shaza.pdf)  
+📊 [Presentation Slides (PPT)](./Splunk_Project_Presentation.pptx)
