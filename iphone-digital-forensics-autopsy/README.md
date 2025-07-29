@@ -1,17 +1,27 @@
-# Digital Forensics – iPhone Image Analysis (Autopsy)
+# Digital Forensics – iPhone Investigation (Insider Threat Case)
 
-This project investigates a forensic image from an iPhone involved in a simulated insider threat case. It uses Autopsy and SQLite viewers to extract user artifacts and build an evidence timeline.
+This project simulates a real-world digital forensic investigation of an iPhone belonging to a suspect in a simulated insider theft at Pure Gold Credit Union (PGCU). Using Autopsy and SQLite, I extracted key evidence including messages, emails, voicemails, and metadata to build a full timeline of events and link co-conspirators.
 
-## 🔧 Tools Used
-- Autopsy
-- FTK Imager
-- SQLite DB Browser
-- Plaso, Chrome History Viewer
+---
 
-## 🔍 Findings
-- Extracted voicemails, text messages, contacts, GPS data
-- Recovered deleted browser history and metadata
-- Created incident timeline linking user aliases and locations
+## 🔧 Tools & Techniques
+
+- Autopsy, SQLite Browser, .AMR/.MOV viewers  
+- Mobile artifact analysis (SMS, Email, Voicemail, GPS)  
+- Timeline reconstruction  
+- Insider threat case building
+
+---
 
 ## 📄 Report
-[Download Digital Forensics Report (PDF)](./Shaza_Digital_Forensics_Report.pdf)
+
+[📥 Download Full Forensics Report (PDF)](./Shaza_Khursheed_Digital_Forensics_Report.pdf)
+
+---
+
+## 👩‍💻 Skills Demonstrated
+
+- Mobile device triage and imaging  
+- Metadata analysis and event correlation  
+- Chain-of-custody alignment  
+- Structured digital forensics reporting
