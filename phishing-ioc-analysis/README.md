@@ -20,3 +20,7 @@ The Bash script detects:
 
 ## 📄 Report
 [Download Full Project Report (PDF)](./phishing-report.pdf)
+
+## 🎥 Demo Video
+[Watch Phishing Campaign Demo (Google Drive)](https://drive.google.com/file/d/1VLDhIcAzyM1ZtZtXig-ejgr2s0WbbDsn/view)
+
