@@ -9,84 +9,97 @@ This project simulates a real-world Security Operations Center (SOC) alert triag
 - Investigate simulated brute-force, account lockouts, and DDoS attacks using log correlation
 - Create dashboards, alerts, and reports for security monitoring
 - Align findings with MITRE ATT&CK techniques
-- Document investigation outcomes and propose future mitigation strategies
+- Document investigation outcomes and propose mitigation strategies
 
 ## Tools and Data Sources
 
 - Splunk Core Platform
 - Apache Web Server Logs (access_combined)
-- Windows Security Logs (e.g., 4625, 4624, 4740)
-- Splunk Add-ons for Apache and CSV
-- Custom SPL queries
-- Simulated threat actor activity (e.g., JobeCorp targeting VSI)
+- Windows Security Logs (4624, 4625, 4740, 1102)
+- SPL queries
+- Custom dashboards and reports
 
-## Detection Examples
+## Visual Overview
+
+### Apache Log Insights
+![Apache Dashboard](Apache%20Dashboard.png)
+
+### Referrer Domain Analysis
+![Apache Referrer Domains](Apache%20Report%20Domains.png)
+
+### Referrer Domain Anomaly During Attack
+![Apache Altered Domains](Apache%20Report%20Domains-altered.png)
+
+### HTTP Method Volume (Baseline)
+![HTTP Methods](Apache%20Report%20Methods.png)
+
+### HTTP Method Volume (Attack)
+![HTTP Methods Altered](Apache%20Report%20Methods-altered.png)
+
+### Response Code Spike Comparison
+![Response Codes](Apache%20Report%20Response%20Code.png)
+![Response Codes Altered](Apache%20Report%20Response%20Code-altered.png)
+
+## Detection Logic (SPL Examples)
 
 ```spl
-# Brute-force login attempts (Windows)
+# Brute-force login attempts
 index=wineventlog EventCode=4625
 | stats count by Account_Name, src_ip
 | where count > 15
 
-# Spike in successful logins (Windows)
+# Excessive successful logins
 index=wineventlog EventCode=4624
 | stats count by Account_Name, src_ip
 | where count > 25
 
-# Excessive POST requests (Apache - potential DDoS)
+# POST request anomaly
 index=apache_logs method=POST
 | stats count by src_ip
 | where count > 10
 
-# Non-US IP surge (Apache)
-index=apache_logs NOT src_ip="US*"
-| stats count by src_ip
-| where count > 200
+# Referrer domain anomaly
+index=apache_logs 
+| top 10 referer_domain
 ```
-
-## Key Alerts Created
-
-| Alert Name               | Description                                              | Threshold Used |
-|--------------------------|----------------------------------------------------------|----------------|
-| Failed Login Spike       | Excessive login failures vs. baseline of 6–10/hr         | >15            |
-| Successful Login Spike   | Rapid login success exceeding 14–21/hr baseline          | >25            |
-| POST Request Surge       | POST requests >7/hr observed in baseline                 | >10            |
-| Non-US IP Volume Spike   | Baseline avg 100 (max 120) → Alert at 200                | >200           |
 
 ## Findings
 
-- **Windows Server**
-  - 1,811 account lockouts for `user_a` in 3 hours
-  - 2,128 password reset attempts for `user_k`
-  - 432 successful logins by `user_j` in 3 hours
-  - Alert thresholds of 15 (failed) and 25 (successful) were exceeded and triggered
+- **Windows Environment**:
+  - 1,811 lockouts for `user_a`, 2,128 password resets (`user_k`)
+  - 329 high severity alerts (6.9%) and 4435 informational events (93%)
+  - Signature patterns revealed account takeovers and privilege escalations
 
-- **Apache Web Server**
-  - POST requests surged from 1.06% to 29.4% of all traffic
-  - 877 POST requests occurred within 0.001 seconds at 4:05:59 PM
-  - 800+ non-US IPs (mostly from Ukraine) accessed the site in a narrow time window
-  - 404 error rate jumped from 2.1% to 15%, suggesting probing or enumeration
-  - Referrer domain of interest: `tuxradar.com`
+- **Apache Server**:
+  - POST volume spiked from 1.06% to 29.4% of traffic
+  - High volume of referrer domains from semi-unknown sources like `tuxradar.com`
+  - HTTP 404 errors increased 7x during attack period
 
-## Mitigation Recommendations
+## MITRE ATT&CK Mapping
 
-- Implement Multi-Factor Authentication (MFA) for all privileged and service accounts
-- Enforce account lockout policies after multiple failed attempts
-- Deploy an IDS/IPS for real-time traffic inspection and blocking
-- Limit login access to trusted geographic regions (e.g., US-only)
-- Apply rate limiting and CAPTCHA on login and form submission endpoints
-- Enable Splunk alert forwarding to incident response channels
-- Baseline expected POST and login volumes and alert on outliers
+| Technique ID | Name                        | Context                    |
+|--------------|-----------------------------|-----------------------------|
+| T1110        | Brute Force                 | Login failure spikes        |
+| T1078        | Valid Accounts              | Suspicious logons           |
+| T1499        | Endpoint Denial of Service  | POST flood from Ukraine     |
+| T1566        | Phishing/Recon via domains  | Referrer domains like `tuxradar.com` |
+
+## Recommendations
+
+- Enforce MFA and password lockout thresholds
+- Geo-block non-relevant foreign access
+- Rate-limit HTTP POST endpoints
+- Tune Splunk alerts to baseline deviation
+- Forward alert events to incident response via ServiceNow or email integration
 
 ## Skills Demonstrated
 
-- SOC-style alert triage and incident simulation in Splunk
-- Detection rule engineering using SPL (Search Processing Language)
-- Correlating network and endpoint logs to identify attack chains
-- Creation of executive dashboards and automated alerts
-- Threat classification, MITRE mapping (T1110 – Brute Force, T1499 – DoS)
-- Clear documentation of findings and proposed mitigations
+- Splunk SPL detection engineering
+- Dashboard and alert tuning
+- PCAP log correlation and anomaly detection
+- Report creation and executive-level documentation
+- Incident simulation under MITRE framework
 
 ## Project Context
 
-This capstone project was completed during a blue team simulation in which our team acted as SOC analysts for a fictional company (VSI). We were tasked with detecting and responding to simulated attacks by a competitor (JobeCorp) aiming to disrupt operations. Using Windows and Apache logs, we engineered detections, tuned alerts against baselines, and documented spikes in malicious activity. This project emphasizes real-world response workflows, escalation logic, and the importance of using analytics to detect stealthy attacks across different log sources.
+This capstone project reflects a hands-on simulation of SOC workflows using Splunk. From log parsing to triage and escalation, it mirrors real-world detection, documentation, and decision-making processes. Findings are backed by threshold analysis and dashboard-driven evidence, demonstrating both detection logic and operational maturity.
