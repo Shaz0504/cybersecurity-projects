@@ -21,18 +21,9 @@ This project simulates a real-world Security Operations Center (SOC) alert triag
 
 ## Visual Overview
 
+The following Apache dashboard was created in Splunk to monitor and analyze HTTP traffic behavior. It helped identify anomalies in request volume, referrer domains, and geographic access patterns—supporting the detection of potential brute-force and web-based attacks.
+
 ![Apache Dashboard](./Apache%20Dashboard.png)
-### Apache Log Insights
-
-### Referrer Domain Analysis
-
-### Referrer Domain Anomaly During Attack
-
-### HTTP Method Volume (Baseline)
-
-### HTTP Method Volume (Attack)
-
-### Response Code Spike Comparison
 
 ## Detection Logic (SPL Examples)
 
