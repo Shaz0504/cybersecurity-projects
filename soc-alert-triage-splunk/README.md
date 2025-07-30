@@ -21,24 +21,18 @@ This project simulates a real-world Security Operations Center (SOC) alert triag
 
 ## Visual Overview
 
+![Apache Dashboard](./Apache%20Dashboard.png)
 ### Apache Log Insights
-![Apache Dashboard](Apache%20Dashboard.png)
 
 ### Referrer Domain Analysis
-![Apache Referrer Domains](Apache%20Report%20Domains.png)
 
 ### Referrer Domain Anomaly During Attack
-![Apache Altered Domains](Apache%20Report%20Domains-altered.png)
 
 ### HTTP Method Volume (Baseline)
-![HTTP Methods](Apache%20Report%20Methods.png)
 
 ### HTTP Method Volume (Attack)
-![HTTP Methods Altered](Apache%20Report%20Methods-altered.png)
 
 ### Response Code Spike Comparison
-![Response Codes](Apache%20Report%20Response%20Code.png)
-![Response Codes Altered](Apache%20Report%20Response%20Code-altered.png)
 
 ## Detection Logic (SPL Examples)
 
