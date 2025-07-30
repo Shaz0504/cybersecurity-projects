@@ -1,5 +1,15 @@
 
-# Network Security: Firewall and IDS Configuration
+# Network Security: Firewall and IDS Configuration – Module 11 Project
+
+## Lab Objectives
+
+This hands-on project simulates real-world tasks of a junior security analyst responsible for defending corporate infrastructure. The primary objectives of this lab are:
+
+- Configure and segment network zones using firewalld in alignment with PCI-DSS requirements
+- Analyze and write Snort intrusion detection rules to detect common threats
+- Understand layered security concepts such as Defense-in-Depth and the Cyber Kill Chain
+- Triaging alerts and identifying threats using Security Onion
+- Translate technical findings into clear and actionable security recommendations
 
 This project simulates a hands-on network security engagement using firewall management, Snort rule analysis, and Security Onion. It was developed as part of a cybersecurity bootcamp and is structured to reflect the responsibilities of a junior SOC or security administrator.
 
@@ -138,7 +148,7 @@ Detects unsolicited traffic to port 4444, often associated with backdoors or rem
 
 ---
 
-## Part 4: Spam Attack Analysis (Security Onion)
+## Part 4: Optional – Spam Attack Analysis (Security Onion)
 
 ### Alert: ET TROJAN JS/Nemucod.M.gen
 
@@ -169,4 +179,12 @@ Detects unsolicited traffic to port 4444, often associated with backdoors or rem
 
 ## Outcome
 
-This project demonstrates layered defense principles, Snort rule analysis, and practical firewall configuration. It reflects entry-level SOC skills in alert interpretation, rule tuning, threat detection, and segmentation-based prevention.
+This project demonstrates foundational SOC and network defense capabilities:
+
+- Configured zone-based firewalld segmentation aligned with PCI-DSS compliance
+- Wrote and analyzed Snort rules to detect port scans and malware downloads
+- Differentiated IDS vs IPS functionality and deployment models
+- Mapped multi-stage attacks to the Cyber Kill Chain
+- Applied layered security principles (Defense-in-Depth) to real-world scenarios
+- Triaged a malicious event using Security Onion and proposed mitigation strategies
+- Documented findings and recommendations clearly for incident response
