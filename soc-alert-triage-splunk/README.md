@@ -1,90 +1,52 @@
 
-# SOC Alert Triage Simulation – Splunk Project
+# SOC Alert Triage Using Splunk
 
-This project simulates a real-world Security Operations Center (SOC) alert triage and investigation process using Splunk. Conducted as part of a 3-day blue team challenge during a cybersecurity bootcamp, it replicates the tasks of a Tier I/II SOC analyst responding to simulated insider and external threats targeting both Windows and Apache environments.
+This project simulates a real-world Security Operations Center (SOC) workflow using Splunk SIEM. It focuses on alert detection, triage, and investigation involving both Apache web logs and Windows event data. The objective is to demonstrate core competencies in log analysis, detection engineering, and threat response using visualizations and rule-based detections.
 
-## Objectives
+## Tools and Technologies
 
-- Develop detection logic and triage workflows using Splunk
-- Investigate simulated brute-force, account lockouts, and DDoS attacks using log correlation
-- Create dashboards, alerts, and reports for security monitoring
-- Align findings with MITRE ATT&CK techniques
-- Document investigation outcomes and propose mitigation strategies
+- Splunk Enterprise (SIEM)
+- Apache Web Server Logs
+- Windows Event Logs (Security, System)
+- MITRE ATT&CK Framework
+- CyberChef, VirusTotal
 
-## Tools and Data Sources
+## Project Objectives
 
-- Splunk Core Platform
-- Apache Web Server Logs (access_combined)
-- Windows Security Logs (4624, 4625, 4740, 1102)
-- SPL queries
-- Custom dashboards and reports
+- Ingest and normalize Apache and Windows logs into Splunk
+- Create detection rules for brute-force login attempts, account lockouts, and suspicious POST activity
+- Build dashboards to visualize log activity by country, IP, method, and response code
+- Investigate anomalies and map findings to MITRE ATT&CK
+- Simulate Tier 1 alert triage and documentation workflow
+
+## Detection Logic and Findings
+
+- Brute-force login attempts identified using high counts of failed logins (Event ID 4625) within a short time window
+- Lockouts and privilege abuse detected via Event ID 4740 and account anomalies
+- POST request volume spikes and rare referrer domains indicated potential automated probing
+- Geo-based anomaly detection flagged excessive traffic from non-standard regions
 
 ## Visual Overview
 
-The following Apache dashboard was created in Splunk to monitor and analyze HTTP traffic behavior. It helped identify anomalies in request volume, referrer domains, and geographic access patterns—supporting the detection of potential brute-force and web-based attacks.
+This Splunk dashboard visualizes Apache HTTP traffic. It highlights request volume, anomalous POST behavior, unusual geographic access, and referrer domains—providing clear situational awareness for SOC analysts.
 
 ![Apache Dashboard](./Apache%20Dashboard.png)
 
-## Detection Logic (SPL Examples)
+## Outcomes
 
-```spl
-# Brute-force login attempts
-index=wineventlog EventCode=4625
-| stats count by Account_Name, src_ip
-| where count > 15
-
-# Excessive successful logins
-index=wineventlog EventCode=4624
-| stats count by Account_Name, src_ip
-| where count > 25
-
-# POST request anomaly
-index=apache_logs method=POST
-| stats count by src_ip
-| where count > 10
-
-# Referrer domain anomaly
-index=apache_logs 
-| top 10 referer_domain
-```
-
-## Findings
-
-- **Windows Environment**:
-  - 1,811 lockouts for `user_a`, 2,128 password resets (`user_k`)
-  - 329 high severity alerts (6.9%) and 4435 informational events (93%)
-  - Signature patterns revealed account takeovers and privilege escalations
-
-- **Apache Server**:
-  - POST volume spiked from 1.06% to 29.4% of traffic
-  - High volume of referrer domains from semi-unknown sources like `tuxradar.com`
-  - HTTP 404 errors increased 7x during attack period
+- Built correlation rules and detection dashboards within Splunk
+- Triaged brute-force login attempts and abnormal POST activity
+- Mapped attack patterns to MITRE ATT&CK techniques (T1110, T1499)
+- Recommended actions such as MFA enforcement, IP filtering, and POST throttling
 
 ## MITRE ATT&CK Mapping
 
-| Technique ID | Name                        | Context                    |
-|--------------|-----------------------------|-----------------------------|
-| T1110        | Brute Force                 | Login failure spikes        |
-| T1078        | Valid Accounts              | Suspicious logons           |
-| T1499        | Endpoint Denial of Service  | POST flood from Ukraine     |
-| T1566        | Phishing/Recon via domains  | Referrer domains like `tuxradar.com` |
+- T1110 – Brute Force
+- T1190 – Exploit Public-Facing Application
+- T1078 – Valid Accounts
+- T1040 – Network Sniffing
+- T1499 – Endpoint Denial of Service
 
-## Recommendations
+## Summary
 
-- Enforce MFA and password lockout thresholds
-- Geo-block non-relevant foreign access
-- Rate-limit HTTP POST endpoints
-- Tune Splunk alerts to baseline deviation
-- Forward alert events to incident response via ServiceNow or email integration
-
-## Skills Demonstrated
-
-- Splunk SPL detection engineering
-- Dashboard and alert tuning
-- PCAP log correlation and anomaly detection
-- Report creation and executive-level documentation
-- Incident simulation under MITRE framework
-
-## Project Context
-
-This capstone project reflects a hands-on simulation of SOC workflows using Splunk. From log parsing to triage and escalation, it mirrors real-world detection, documentation, and decision-making processes. Findings are backed by threshold analysis and dashboard-driven evidence, demonstrating both detection logic and operational maturity.
+This project demonstrates a full SOC Tier 1 triage workflow from alert detection to investigation and reporting. It highlights practical experience using Splunk to hunt for threats, respond to alerts, and deliver findings using visual and analytical evidence.
