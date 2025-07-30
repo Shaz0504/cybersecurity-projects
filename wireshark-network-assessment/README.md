@@ -18,14 +18,25 @@ This project was completed as part of a cybersecurity bootcamp and reflects Tier
 
 ---
 
+## Target Environment Overview
+
+The assessment was conducted against designated infrastructure associated with a simulated Hollywood office. Below is the server inventory that was used during the scanning and investigation phases:
+
+| Server Name         | IP Address     | Location         | OS           | Service Role     |
+|---------------------|----------------|------------------|--------------|------------------|
+| HW-Web-01           | 15.199.95.91   | Hollywood Office | Ubuntu 18.04 | Web Server       |
+| HW-Mail-01          | 15.199.94.91   | Hollywood Office | Windows SVR  | Mail Server      |
+| HW-DNS-01           | 161.35.96.20   | Hollywood Office | Ubuntu 20.04 | DNS/AD Server    |
+
+These IPs were probed using ping, Nmap, and SSH as part of the multi-phase assessment described below.
+
+---
+
 ## Assessment Workflow
 
 ### Phase 1: Host Discovery
 
-Ping sweep of target subnet revealed responsive hosts:
-- 15.199.95.91 – Responded
-- 161.35.96.20 – Responded
-- 15.199.94.91 – No response (likely ICMP disabled)
+Ping sweep was conducted across all IPs listed in the internal server inventory. Hosts that responded included 15.199.95.91 and 161.35.96.20. Some systems did not respond, which may indicate ICMP is disabled or filtered.
 
 Findings at OSI Layer 3 (Network).
 
@@ -75,19 +86,19 @@ Findings at OSI Layers 2 (Data Link), 3 (Network), and 7 (Application).
 
 ## Key Findings
 
-- Live hosts responded to ICMP pings, enabling basic network reconnaissance
-- Multiple services (SSH, HTTP) exposed to external access
-- Host file was altered to redirect a known domain to a malicious IP
+- Live hosts responded to ICMP pings, enabling basic network reconnaissance  
+- Multiple services (SSH, HTTP) exposed to external access  
+- Host file was altered to redirect a known domain to a malicious IP  
 - PCAP analysis confirmed ARP poisoning and outbound communication to malicious domains
 
 ---
 
 ## Recommendations
 
-- Block ICMP replies to reduce host enumeration surface
-- Restrict external access to SSH and web services via firewall and allowlists
-- Monitor host file integrity and enforce centralized DNS
-- Enable dynamic ARP inspection and port security on switching infrastructure
+- Block ICMP replies to reduce host enumeration surface  
+- Restrict external access to SSH and web services via firewall and allowlists  
+- Monitor host file integrity and enforce centralized DNS  
+- Enable dynamic ARP inspection and port security on switching infrastructure  
 - Replace password-based SSH authentication with key-based access control
 
 ---
