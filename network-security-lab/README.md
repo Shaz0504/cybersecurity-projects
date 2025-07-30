@@ -1,5 +1,5 @@
 
-# Network Security: Firewall and IDS Configuration – Module 11 Project
+# Network Security: Firewall and IDS Configuration
 
 ## Lab Objectives
 
@@ -148,7 +148,7 @@ Detects unsolicited traffic to port 4444, often associated with backdoors or rem
 
 ---
 
-## Part 4: Optional – Spam Attack Analysis (Security Onion)
+## Part 4: Attack Analysis (Security Onion)
 
 ### Alert: ET TROJAN JS/Nemucod.M.gen
 
