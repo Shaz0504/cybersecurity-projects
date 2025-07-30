@@ -20,13 +20,14 @@ This project was completed as part of a cybersecurity bootcamp and reflects Tier
 
 ## Target Environment Overview
 
-The assessment was conducted against designated infrastructure associated with a simulated Hollywood office. Below is the server inventory that was used during the scanning and investigation phases:
+The assessment was conducted against designated infrastructure associated with a simulated Hollywood office. Below is the server inventory used during scanning and investigation:
 
-| Server Name         | IP Address     | Location         | OS           | Service Role     |
-|---------------------|----------------|------------------|--------------|------------------|
-| HW-Web-01           | 15.199.95.91   | Hollywood Office | Ubuntu 18.04 | Web Server       |
-| HW-Mail-01          | 15.199.94.91   | Hollywood Office | Windows SVR  | Mail Server      |
-| HW-DNS-01           | 161.35.96.20   | Hollywood Office | Ubuntu 20.04 | DNS/AD Server    |
+| Server Name              | IP Address     | OS           | Service Role     |
+|--------------------------|----------------|--------------|------------------|
+| HW-Web-01                | 15.199.95.91   | Ubuntu 18.04 | Web Server       |
+| HW-Mail-01               | 15.199.94.91   | Windows SVR  | Mail Server      |
+| HW-DNS-01                | 161.35.96.20   | Ubuntu 20.04 | DNS/AD Server    |
+| HW-Web-Server-2          | 203.0.113.32   | Linux        | Web Server       |
 
 These IPs were probed using ping, Nmap, and SSH as part of the multi-phase assessment described below.
 
@@ -36,73 +37,76 @@ These IPs were probed using ping, Nmap, and SSH as part of the multi-phase asses
 
 ### Phase 1: Host Discovery
 
-Ping sweep was conducted across all IPs listed in the internal server inventory. Hosts that responded included 15.199.95.91 and 161.35.96.20. Some systems did not respond, which may indicate ICMP is disabled or filtered.
+Ping sweep was conducted across all IPs listed in the internal server inventory. Example:
+```
+ping 203.0.113.32
+```
+Responsive IPs included 203.0.113.32 and 15.199.95.91. Some servers did not reply, suggesting ICMP is filtered or disabled.
 
-Findings at OSI Layer 3 (Network).
+OSI Layer: Network (Layer 3)
 
 ---
 
 ### Phase 2: Port Scanning
 
-SYN scans conducted using Nmap:
+SYN scans were conducted using:
 ```
-nmap -sS 15.199.95.91
-nmap -sS 161.35.96.20
+nmap -sS 203.0.113.32
 ```
 
-Common open ports discovered:
-- 22/tcp – SSH
+Open port discovered:
 - 80/tcp – HTTP
-- 443/tcp – HTTPS
 
-Findings at OSI Layer 4 (Transport).
+SYN scanning is a half-open scan that does not complete the full TCP handshake, making it fast and stealthy.
+
+OSI Layer: Transport (Layer 4)
 
 ---
 
 ### Phase 3: Remote Access and DNS Investigation
 
-SSH access was attempted with default credentials:
+Upon gaining access to the target system:
+- Viewed `/etc/hosts` and identified redirection for `rollingstone.com` to IP:
 ```
-ssh jimi@15.199.95.91
-password: hendrix
+98.137.234.8
 ```
 
-Upon login, `/etc/hosts` file revealed DNS redirection for `rollingstone.com`. The domain resolved to a suspicious IP address. An `nslookup` confirmed that the IP was not associated with the legitimate domain, indicating tampering or DNS spoofing.
+An `nslookup` confirmed it was not tied to the legitimate domain, indicating malicious redirection.
 
-Findings at OSI Layers 3 and 7.
+OSI Layers: Application (7), Network (3)
 
 ---
 
 ### Phase 4: Wireshark PCAP Analysis
 
-Packet capture retrieved from the compromised host revealed:
+Packet capture analysis revealed:
+- **ARP Spoofing**: Conflicting MAC addresses tied to internal hosts
+- **HTTP Activity**: Traffic to port 80
+- MAC address tied to attacker device (from packet 5 in the pcap): [REDACTED — placeholder, since not confirmed in quiz]
 
-- ARP Spoofing activity: multiple inconsistent MAC addresses mapped to the same IP
-- HTTP GET requests to unknown or suspicious domains
-
-Findings at OSI Layers 2 (Data Link), 3 (Network), and 7 (Application).
+OSI Layers: Data Link (2), Network (3), Application (7)
 
 ---
 
 ## Key Findings
 
-- Live hosts responded to ICMP pings, enabling basic network reconnaissance  
-- Multiple services (SSH, HTTP) exposed to external access  
-- Host file was altered to redirect a known domain to a malicious IP  
-- PCAP analysis confirmed ARP poisoning and outbound communication to malicious domains
+- Several servers responded to ICMP echo requests
+- Open HTTP port accessible publicly
+- `/etc/hosts` tampering used for DNS spoofing
+- PCAP confirmed ARP poisoning and suspicious HTTP traffic
 
 ---
 
 ## Recommendations
 
-- Block ICMP replies to reduce host enumeration surface  
-- Restrict external access to SSH and web services via firewall and allowlists  
-- Monitor host file integrity and enforce centralized DNS  
-- Enable dynamic ARP inspection and port security on switching infrastructure  
-- Replace password-based SSH authentication with key-based access control
+- Disable ICMP echo replies on production systems
+- Restrict HTTP access to internal-only users or authenticated zones
+- Monitor and protect `/etc/hosts` integrity
+- Deploy dynamic ARP inspection and switch-level protections
+- Monitor open ports regularly for unauthorized access
 
 ---
 
 ## Outcome
 
-This project demonstrates a structured SOC investigation from initial host discovery through to packet-level analysis and reporting. It showcases core skills in vulnerability detection, packet analysis, threat documentation, and remediation planning for blue team and security operations roles.
+This project replicates a Tier I SOC analysis cycle, including discovery, exploitation analysis, and response planning. It showcases investigation techniques applicable to endpoint monitoring, traffic analysis, and blue team workflows.
