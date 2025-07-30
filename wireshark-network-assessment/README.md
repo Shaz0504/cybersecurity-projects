@@ -82,7 +82,7 @@ OSI Layers: Application (7), Network (3)
 Packet capture analysis revealed:
 - **ARP Spoofing**: Conflicting MAC addresses tied to internal hosts
 - **HTTP Activity**: Traffic to port 80
-- MAC address tied to attacker device (from packet 5 in the pcap): [REDACTED — placeholder, since not confirmed in quiz]
+- MAC address tied to attacker device (from packet 5 in the pcap): 9c:8e:99:ae:5c:42
 
 OSI Layers: Data Link (2), Network (3), Application (7)
 
