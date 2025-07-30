@@ -1,5 +1,5 @@
 
-# Network Security: Firewall and IDS Configuration – Module 11 Project
+# Network Security: Firewall and IDS Configuration
 
 This project simulates a hands-on network security engagement using firewall management, Snort rule analysis, and Security Onion. It was developed as part of a cybersecurity bootcamp and is structured to reflect the responsibilities of a junior SOC or security administrator.
 
@@ -138,7 +138,7 @@ Detects unsolicited traffic to port 4444, often associated with backdoors or rem
 
 ---
 
-## Part 4: Optional – Spam Attack Analysis (Security Onion)
+## Part 4: Spam Attack Analysis (Security Onion)
 
 ### Alert: ET TROJAN JS/Nemucod.M.gen
 
